@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from '../App';
 import ScrambledText from '../components/ScrambledText';
+import FuzzyText from '../components/FuzzyText';
 import { ChevronRight, Sparkles, Terminal } from 'lucide-react';
 
 interface HomeProps {
@@ -54,11 +55,25 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        {/* Name Heading */}
-        <div className="mb-12 md:mb-16">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-cyan-400 tracking-tighter">
+        {/* Name Heading with Fuzzy Text Effect */}
+        <div className="mb-12 md:mb-16 flex justify-center">
+          <FuzzyText
+            fontSize="clamp(3rem, 12vw, 8rem)"
+            fontWeight={900}
+            color="#06B6D4"
+            enableHover={true}
+            baseIntensity={0.15}
+            hoverIntensity={0.45}
+            fuzzRange={25}
+            fps={60}
+            direction="both"
+            transitionDuration={200}
+            clickEffect={false}
+            glitchMode={false}
+            className="select-none"
+          >
             Godwin Mbabu
-          </h1>
+          </FuzzyText>
         </div>
 
         <div className="max-w-6xl mx-auto">
