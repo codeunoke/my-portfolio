@@ -58,16 +58,24 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      const computedFontFamily =
-        fontFamily === 'inherit' ? window.getComputedStyle(canvas).fontFamily || 'sans-serif' : fontFamily;
+      let computedFontFamily = fontFamily;
+      if (fontFamily === 'inherit') {
+        // Try to get from a temporary element instead
+        const temp = document.createElement('div');
+        temp.style.fontFamily = 'inherit';
+        document.body.appendChild(temp);
+        computedFontFamily = window.getComputedStyle(temp).fontFamily || 'Arial, sans-serif';
+        document.body.removeChild(temp);
+      }
 
       const fontSizeStr = typeof fontSize === 'number' ? `${fontSize}px` : fontSize;
       const fontString = `${fontWeight} ${fontSizeStr} ${computedFontFamily}`;
 
       try {
         await document.fonts.load(fontString);
-      } catch {
-        await document.fonts.ready;
+      } catch (e) {
+        // Font loading may fail, continue anyway
+        console.warn('Font loading failed, continuing with system fonts', e);
       }
       if (isCancelled) return;
 
@@ -111,11 +119,15 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
       const textBoundingWidth = Math.ceil(letterSpacing !== 0 ? totalWidth : actualLeft + actualRight);
       const tightHeight = Math.ceil(actualAscent + actualDescent);
 
+      // Ensure minimum dimensions
+      const minWidth = Math.max(textBoundingWidth, 50);
+      const minHeight = Math.max(tightHeight, 50);
+
       const extraWidthBuffer = 10;
-      const offscreenWidth = textBoundingWidth + extraWidthBuffer;
+      const offscreenWidth = minWidth + extraWidthBuffer;
 
       offscreen.width = offscreenWidth;
-      offscreen.height = tightHeight;
+      offscreen.height = minHeight;
 
       const xOffset = extraWidthBuffer / 2;
       offCtx.font = `${fontWeight} ${fontSizeStr} ${computedFontFamily}`;
@@ -142,13 +154,13 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
       const horizontalMargin = fuzzRange + 20;
       const verticalMargin = 0;
       canvas.width = offscreenWidth + horizontalMargin * 2;
-      canvas.height = tightHeight + verticalMargin * 2;
+      canvas.height = minHeight + verticalMargin * 2;
       ctx.translate(horizontalMargin, verticalMargin);
 
       const interactiveLeft = horizontalMargin + xOffset;
       const interactiveTop = verticalMargin;
-      const interactiveRight = interactiveLeft + textBoundingWidth;
-      const interactiveBottom = interactiveTop + tightHeight;
+      const interactiveRight = interactiveLeft + minWidth;
+      const interactiveBottom = interactiveTop + minHeight;
 
       let isHovering = false;
       let isClicking = false;
@@ -185,7 +197,7 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
           -fuzzRange - 20,
           -fuzzRange - 10,
           offscreenWidth + 2 * (fuzzRange + 20),
-          tightHeight + 2 * (fuzzRange + 10)
+          minHeight + 2 * (fuzzRange + 10)
         );
 
         if (isClicking) {
@@ -211,7 +223,7 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
 
         if (direction === 'horizontal') {
           // Horizontal: shift each row left/right
-          for (let j = 0; j < tightHeight; j++) {
+          for (let j = 0; j < minHeight; j++) {
             const dx = Math.floor(currentIntensity * (Math.random() - 0.5) * fuzzRange);
             ctx.drawImage(offscreen, 0, j, offscreenWidth, 1, dx, j, offscreenWidth, 1);
           }
@@ -219,28 +231,28 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
           // Vertical: shift each column up/down
           for (let i = 0; i < offscreenWidth; i++) {
             const dy = Math.floor(currentIntensity * (Math.random() - 0.5) * fuzzRange);
-            ctx.drawImage(offscreen, i, 0, 1, tightHeight, i, dy, 1, tightHeight);
+            ctx.drawImage(offscreen, i, 0, 1, minHeight, i, dy, 1, minHeight);
           }
         } else {
           // Both: shift each row horizontally, then shift each column vertically
           // First pass: draw with horizontal displacement to a temp position
-          for (let j = 0; j < tightHeight; j++) {
+          for (let j = 0; j < minHeight; j++) {
             const dx = Math.floor(currentIntensity * (Math.random() - 0.5) * fuzzRange);
             ctx.drawImage(offscreen, 0, j, offscreenWidth, 1, dx, j, offscreenWidth, 1);
           }
           // Second pass: read what we just drew and apply vertical displacement
-          const tempData = ctx.getImageData(0, 0, offscreenWidth + fuzzRange, tightHeight + fuzzRange);
+          const tempData = ctx.getImageData(0, 0, offscreenWidth + fuzzRange, minHeight + fuzzRange);
           ctx.clearRect(
             -fuzzRange - 20,
             -fuzzRange - 10,
             offscreenWidth + 2 * (fuzzRange + 20),
-            tightHeight + 2 * (fuzzRange + 10)
+            minHeight + 2 * (fuzzRange + 10)
           );
           ctx.putImageData(tempData, 0, 0);
           for (let i = 0; i < offscreenWidth + fuzzRange; i++) {
             const dy = Math.floor(currentIntensity * (Math.random() - 0.5) * fuzzRange * 0.5);
-            const colData = ctx.getImageData(i, 0, 1, tightHeight + fuzzRange);
-            ctx.clearRect(i, -fuzzRange, 1, tightHeight + 2 * fuzzRange);
+            const colData = ctx.getImageData(i, 0, 1, minHeight + fuzzRange);
+            ctx.clearRect(i, -fuzzRange, 1, minHeight + 2 * fuzzRange);
             ctx.putImageData(colData, i, dy);
           }
         }
@@ -351,7 +363,7 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
     letterSpacing
   ]);
 
-  return <canvas ref={canvasRef} className={className} />;
+  return <canvas ref={canvasRef} className={`block ${className}`} style={{ display: 'block', margin: '0 auto' }} />;
 };
 
 export default FuzzyText;
