@@ -56,12 +56,12 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* TextPressure Name Effect */}
-        <div className="h-32 md:h-40 mb-8 md:mb-12">
+        <div className="h-48 md:h-64 mb-12 md:mb-16 -mx-4 sm:-mx-6">
           <TextPressure
             text="Godwin Mbabu"
             textColor="#06B6D4"
             fontUrl="https://fonts.gstatic.com/s/space/v15/3X7pDo_ysS9ftPXP0cBTFVVc0ZpG5Vvh9w0X41oDiEKzBhk7AQKKAAAAA---"
-            minFontSize={20}
+            minFontSize={48}
             width={true}
             weight={true}
             italic={false}
