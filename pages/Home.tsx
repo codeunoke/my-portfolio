@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from '../App';
 import ScrambledText from '../components/ScrambledText';
+import TextPressure from '../components/TextPressure';
 import { ChevronRight, Sparkles, Terminal } from 'lucide-react';
 
 interface HomeProps {
@@ -54,6 +55,20 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        {/* TextPressure Name Effect */}
+        <div className="h-32 md:h-40 mb-8 md:mb-12">
+          <TextPressure
+            text="Godwin Mbabu"
+            textColor="#06B6D4"
+            fontUrl="https://fonts.gstatic.com/s/space/v15/3X7pDo_ysS9ftPXP0cBTFVVc0ZpG5Vvh9w0X41oDiEKzBhk7AQKKAAAAA---"
+            minFontSize={20}
+            width={true}
+            weight={true}
+            italic={false}
+            alpha={false}
+          />
+        </div>
+
         <div className="max-w-6xl mx-auto">
           {/* Availability Badge */}
           <div className={`inline-flex items-center gap-3 mb-12 px-4 py-2.5 rounded-full border border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-cyan-500/5 backdrop-blur-sm text-cyan-400 text-xs font-bold tracking-[0.2em] uppercase transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
