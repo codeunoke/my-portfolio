@@ -5,12 +5,12 @@ import { PROFILE } from '../constants';
 const Hero: React.FC = () => {
   return (
     <div className="text-center max-w-4xl px-4 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-      <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 text-sm font-semibold tracking-wider uppercase">
+      <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-red-600/20 bg-red-600/5 text-red-500 text-sm font-semibold tracking-wider uppercase">
         Available for new opportunities
       </div>
       
       <h1 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter text-white leading-[1.1]">
-        GODWIN <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600">MBABU</span>
+        GODWIN <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-amber-500">MBABU</span>
       </h1>
       
       <p className="text-xl md:text-2xl text-slate-400 font-light leading-relaxed mb-12 max-w-2xl mx-auto">
@@ -20,14 +20,14 @@ const Hero: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
         <a 
           href="#projects" 
-          className="group relative px-8 py-4 bg-cyan-500 text-slate-950 font-bold rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95"
+          className="group relative px-8 py-4 bg-red-600 text-white font-bold rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-lg shadow-red-600/30"
         >
           <span className="relative z-10">View My Work</span>
           <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
         </a>
         <a 
           href="#about" 
-          className="px-8 py-4 glass border border-white/10 text-white font-bold rounded-2xl transition-all hover:bg-white/5 active:scale-95"
+          className="px-8 py-4 glass border border-green-600/20 text-white font-bold rounded-2xl transition-all hover:bg-green-600/10 active:scale-95"
         >
           Read My Story
         </a>

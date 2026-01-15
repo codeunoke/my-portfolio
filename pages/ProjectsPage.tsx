@@ -49,15 +49,15 @@ const ProjectsPage: React.FC = () => {
     <div className="min-h-screen py-20 px-4 container mx-auto relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-red-600/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-green-600/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-red-600/10 to-green-600/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-20 md:mb-32">
-          <div className="inline-flex items-center gap-3 mb-8 px-4 py-2.5 rounded-full border border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-cyan-500/5 backdrop-blur-sm text-cyan-400 text-xs font-bold tracking-[0.2em] uppercase">
+          <div className="inline-flex items-center gap-3 mb-8 px-4 py-2.5 rounded-full border border-red-600/20 bg-gradient-to-r from-red-600/10 to-red-600/5 backdrop-blur-sm text-red-500 text-xs font-bold tracking-[0.2em] uppercase">
             <Sparkles className="w-3.5 h-3.5" />
             Portfolio Showcase
           </div>
@@ -65,10 +65,10 @@ const ProjectsPage: React.FC = () => {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 mb-16">
             <div className="max-w-3xl">
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 text-white tracking-tighter leading-none">
-                <span className="block bg-gradient-to-r from-cyan-400 via-white to-indigo-400 bg-clip-text text-transparent">
+                <span className="block bg-gradient-to-r from-red-500 via-white to-green-500 bg-clip-text text-transparent">
                   PROJECTS
                 </span>
-                <span className="text-3xl md:text-4xl text-cyan-400 block mt-4">Case Studies & Solutions</span>
+                <span className="text-3xl md:text-4xl text-red-500 block mt-4">Case Studies & Solutions</span>
               </h1>
               <p className="text-xl text-slate-300 font-medium max-w-2xl leading-relaxed">
                 Building data-driven solutions that bridge analytics and engineering for impactful results.
@@ -78,9 +78,9 @@ const ProjectsPage: React.FC = () => {
             {/* Stats Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 min-w-[300px]">
               {[
-                { label: "Projects", value: `${stats.totalProjects}+`, icon: <Zap className="w-4 h-4" />, color: "from-cyan-500 to-blue-500" },
-                { label: "Industries", value: `${stats.industries}`, icon: <BarChart className="w-4 h-4" />, color: "from-indigo-500 to-purple-500" },
-                { label: "Years Active", value: `${stats.yearsActive}`, icon: <Sparkles className="w-4 h-4" />, color: "from-emerald-500 to-cyan-500" }
+                { label: "Projects", value: `${stats.totalProjects}+`, icon: <Zap className="w-4 h-4" />, color: "from-red-600 to-red-700" },
+                { label: "Industries", value: `${stats.industries}`, icon: <BarChart className="w-4 h-4" />, color: "from-green-600 to-green-700" },
+                { label: "Years Active", value: `${stats.yearsActive}`, icon: <Sparkles className="w-4 h-4" />, color: "from-amber-600 to-amber-500" }
               ].map((stat, idx) => (
                 <div key={idx} className="glass-card p-6 rounded-2xl border border-white/5 backdrop-blur-sm hover:border-white/10 transition-all hover:scale-105">
                   <div className="flex items-center justify-between mb-3">
@@ -110,7 +110,7 @@ const ProjectsPage: React.FC = () => {
                 placeholder="Search projects by name, technology, or industry..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-12 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/10 transition-all"
+                className="w-full pl-12 pr-12 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-red-600/50 focus:bg-white/10 transition-all"
                 aria-label="Search projects"
               />
               {searchQuery && (
@@ -138,7 +138,7 @@ const ProjectsPage: React.FC = () => {
                 onClick={() => setActiveFilter(category)}
                 className={`px-5 py-2.5 rounded-full border transition-all duration-300 text-sm font-bold uppercase tracking-wider min-h-[44px] ${
                   activeFilter === category
-                    ? 'bg-gradient-to-r from-cyan-500 to-indigo-500 text-white border-transparent shadow-lg shadow-cyan-500/20'
+                    ? 'bg-gradient-to-r from-red-600 to-red-700 text-white border-transparent shadow-lg shadow-red-600/20'
                     : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10 hover:text-slate-300'
                 }`}
                 aria-pressed={activeFilter === category}

@@ -62,8 +62,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
     <footer className="relative py-20 px-4 border-t border-white/5 bg-gradient-to-b from-slate-950 to-slate-950/95 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cyan-500/5 to-transparent"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-red-600/5 to-transparent"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-600/5 rounded-full blur-3xl"></div>
       </div>
 
       <div className="container mx-auto relative z-10">
@@ -72,8 +72,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-4 mb-8">
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-indigo-500 rounded-2xl blur-lg opacity-50 group-hover:opacity-70 transition-opacity"></div>
-                <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-indigo-500 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-cyan-500/20">
+                <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-green-600 rounded-2xl blur-lg opacity-50 group-hover:opacity-70 transition-opacity"></div>
+                <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600 to-green-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-red-600/20">
                   {PROFILE.name.split(' ').map(n => n[0]).join('')}
                 </div>
               </div>
@@ -96,7 +96,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             {/* Contact Button */}
             <button
               onClick={() => onNavigate('contact')}
-              className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 text-cyan-400 rounded-full border border-cyan-500/20 hover:border-cyan-500/40 transition-all hover:scale-105"
+              className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-600/10 to-green-600/10 text-red-500 rounded-full border border-red-600/20 hover:border-red-600/40 transition-all hover:scale-105"
             >
               <Mail className="w-4 h-4" />
               <span className="font-semibold">Get in Touch</span>
@@ -107,7 +107,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Navigation */}
           <div>
             <h4 className="font-bold text-white mb-8 uppercase tracking-[0.2em] text-xs flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-cyan-500"></div>
+              <div className="w-2 h-2 rounded-full bg-red-600"></div>
               Navigation
             </h4>
             <ul className="space-y-4">
@@ -119,7 +119,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     onMouseLeave={() => setHoveredLink(null)}
                     className="group flex items-center gap-2 text-slate-400 hover:text-white transition-all duration-300"
                   >
-                    <div className={`w-1.5 h-1.5 rounded-full bg-cyan-500 transition-all duration-300 ${
+                    <div className={`w-1.5 h-1.5 rounded-full bg-red-600 transition-all duration-300 ${
                       hoveredLink === item.label ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
                     }`}></div>
                     <span className="font-medium">{item.label}</span>
@@ -135,7 +135,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Social Links */}
           <div>
             <h4 className="font-bold text-white mb-8 uppercase tracking-[0.2em] text-xs flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-indigo-500"></div>
+              <div className="w-2 h-2 rounded-full bg-green-600"></div>
               Connect
             </h4>
             <ul className="space-y-4">

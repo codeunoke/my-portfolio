@@ -11,13 +11,13 @@ const ContactPage: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-12">
           <div className="space-y-12">
             <div>
-              <h4 className="text-xs font-black uppercase text-cyan-400 tracking-[0.3em] mb-4">Location</h4>
+              <h4 className="text-xs font-black uppercase text-red-500 tracking-[0.3em] mb-4">Location</h4>
               <p className="text-2xl font-bold text-white">{PROFILE.location}</p>
             </div>
             
             <div>
-              <h4 className="text-xs font-black uppercase text-cyan-400 tracking-[0.3em] mb-4">Inquiries</h4>
-              <p className="text-2xl font-bold text-white underline decoration-cyan-500/30">{PROFILE.email}</p>
+              <h4 className="text-xs font-black uppercase text-red-500 tracking-[0.3em] mb-4">Inquiries</h4>
+              <p className="text-2xl font-bold text-white underline decoration-red-600/30">{PROFILE.email}</p>
               <p className="text-slate-500 font-medium">{PROFILE.phone}</p>
             </div>
 
@@ -33,15 +33,15 @@ const ContactPage: React.FC = () => {
             <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Full Name</label>
-                <input type="text" placeholder="Your Name" className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:border-cyan-500/50 transition-all text-white" />
+                <input type="text" placeholder="Your Name" className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:border-red-600/50 transition-all text-white" />
               </div>
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Email Address</label>
-                <input type="email" placeholder="email@example.com" className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:border-cyan-500/50 transition-all text-white" />
+                <input type="email" placeholder="email@example.com" className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:border-red-600/50 transition-all text-white" />
               </div>
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Message</label>
-                <textarea rows={4} placeholder="Let's build something amazing..." className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:border-cyan-500/50 transition-all resize-none text-white"></textarea>
+                <textarea rows={4} placeholder="Let's build something amazing..." className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:border-red-600/50 transition-all resize-none text-white"></textarea>
               </div>
               <button className="w-full py-5 bg-white text-slate-950 font-black rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-widest text-xs">
                 Send Message

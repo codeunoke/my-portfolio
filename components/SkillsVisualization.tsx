@@ -23,15 +23,15 @@ const SkillsVisualization: React.FC<SkillsVisualizationProps> = ({ skills, chart
   }, [skills]);
 
   const colors = {
-    'Data Science & Analytics': '#06b6d4',
-    'Full Stack Development': '#6366f1',
+    'Data Science & Analytics': '#CE1126',
+    'Full Stack Development': '#007A5E',
   };
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload[0]) {
       return (
-        <div className="bg-slate-900 border border-cyan-500/30 rounded-lg p-3 shadow-lg">
-          <p className="text-cyan-400 font-bold text-sm">{payload[0].payload.fullName}</p>
+        <div className="bg-slate-900 border border-red-600/30 rounded-lg p-3 shadow-lg">
+          <p className="text-red-500 font-bold text-sm">{payload[0].payload.fullName}</p>
           <p className="text-white font-bold">Proficiency: {payload[0].value}%</p>
         </div>
       );
@@ -57,12 +57,12 @@ const SkillsVisualization: React.FC<SkillsVisualizationProps> = ({ skills, chart
       <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(34,211,238,0.1)' }} />
       <Bar 
         dataKey="level" 
-        fill="#06b6d4" 
+        fill="#CE1126" 
         radius={[8, 8, 0, 0]}
         animationDuration={800}
       >
         {data.map((entry, index) => (
-          <Bar key={`bar-${index}`} dataKey="level" fill={colors[entry.category as keyof typeof colors] || '#06b6d4'} />
+          <Bar key={`bar-${index}`} dataKey="level" fill={colors[entry.category as keyof typeof colors] || '#CE1126'} />
         ))}
       </Bar>
     </BarChart>
@@ -86,9 +86,9 @@ const SkillsVisualization: React.FC<SkillsVisualizationProps> = ({ skills, chart
       <Line 
         type="monotone" 
         dataKey="level" 
-        stroke="#06b6d4" 
+        stroke="#CE1126" 
         strokeWidth={3}
-        dot={{ fill: '#06b6d4', r: 5 }}
+        dot={{ fill: '#CE1126', r: 5 }}
         activeDot={{ r: 7 }}
         name="Proficiency Level"
         animationDuration={800}
