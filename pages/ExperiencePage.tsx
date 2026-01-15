@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { EXPERIENCES } from '../constants';
 import { Briefcase, Calendar, ChevronRight, ExternalLink, Sparkles, Target } from 'lucide-react';
-import ScrollStack, { ScrollStackItem } from '../components/ScrollStack';
 
 const ExperiencePage: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -50,23 +49,15 @@ const ExperiencePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Timeline with ScrollStack Animation */}
-        <ScrollStack
-          className="experience-scroll-stack"
-          itemDistance={60}
-          itemScale={0.025}
-          itemStackDistance={25}
-          stackPosition="15%"
-          scaleEndPosition="8%"
-          baseScale={0.87}
-          rotationAmount={0}
-          blurAmount={0.4}
-          useWindowScroll={true}
-          onStackComplete={undefined}
-        >
-          {EXPERIENCES.map((exp, idx) => (
-            <ScrollStackItem key={idx} itemClassName="experience-card">
+        {/* Timeline */}
+        <div className="relative">
+          {/* Timeline line */}
+          <div className="absolute left-0 md:left-1/3 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent hidden md:block"></div>
+          
+          <div className="space-y-8">
+            {EXPERIENCES.map((exp, idx) => (
               <div 
+                key={idx}
                 className="group relative"
                 onMouseEnter={() => setActiveIndex(idx)}
                 onMouseLeave={() => setActiveIndex(null)}
@@ -195,9 +186,9 @@ const ExperiencePage: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </ScrollStackItem>
-          ))}
-        </ScrollStack>
+            ))}
+          </div>
+        </div>
 
         {/* Footer CTA */}
         <div className="mt-24 pt-16 border-t border-white/10">
@@ -226,29 +217,6 @@ const ExperiencePage: React.FC = () => {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-          }
-          
-          .experience-scroll-stack {
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-          }
-          
-          .experience-card {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 2rem;
-          }
-          
-          @media (max-width: 768px) {
-            .experience-scroll-stack {
-              height: auto;
-            }
-            
-            .experience-card {
-              min-height: auto;
-            }
           }
           
           @keyframes slideIn {
