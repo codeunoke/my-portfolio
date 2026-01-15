@@ -1,0 +1,15 @@
+
+{
+  "name": "godwin-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.12.7"
+  },
+  "scripts": {
+    "build": "echo 'Static ESM site - no build required'",
+    "start": "echo 'Starting...'"
+  }
+}
