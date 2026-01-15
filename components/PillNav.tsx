@@ -122,6 +122,32 @@ const PillNav: React.FC<PillNavProps> = ({
     activeTweenRefs.current[i] = tl.reverse();
   };
 
+  // Clean up all animations when navigation occurs
+  const handleNavigate = (view: View) => {
+    // Kill all pill animations
+    tlRefs.current.forEach(tl => tl?.kill());
+    activeTweenRefs.current.forEach(tween => tween?.kill());
+    
+    // Close mobile menu with proper delay to prevent animation conflict
+    if (isMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+      const hamburger = hamburgerRef.current;
+      const menu = mobileMenuRef.current;
+      
+      if (hamburger) {
+        const lines = hamburger.querySelectorAll('.hamburger-line');
+        gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.2, ease, overwrite: 'auto' });
+        gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.2, ease, overwrite: 'auto' });
+      }
+      
+      if (menu) {
+        gsap.to(menu, { opacity: 0, y: 10, duration: 0.15, ease, overwrite: 'auto', onComplete: () => gsap.set(menu, { visibility: 'hidden' }) });
+      }
+    }
+    
+    onNavigate(view);
+  };
+
   const handleLogoEnter = () => {
     const img = logoImgRef.current;
     if (!img) return;
@@ -197,7 +223,7 @@ const PillNav: React.FC<PillNavProps> = ({
             {items.map((item, i) => (
               <li key={item.href} role="none">
                 <button
-                  onClick={() => onNavigate(item.href)}
+                  onClick={() => handleNavigate(item.href)}
                   className={`pill relative overflow-hidden flex items-center justify-center px-4 sm:px-5 py-2.5 rounded-full transition-all duration-300 group min-h-[44px] text-xs sm:text-sm ${activeHref === item.href ? 'is-active' : ''}`}
                   onMouseEnter={() => handleEnter(i)}
                   onMouseLeave={() => handleLeave(i)}
@@ -241,7 +267,7 @@ const PillNav: React.FC<PillNavProps> = ({
           {items.map((item) => (
             <li key={item.href}>
               <button
-                onClick={() => { onNavigate(item.href); toggleMobileMenu(); }}
+                onClick={() => handleNavigate(item.href)}
                 className={`w-full text-left px-4 sm:px-6 py-3 sm:py-4 rounded-2xl font-bold text-base sm:text-lg transition-all min-h-[44px] flex items-center ${activeHref === item.href ? 'bg-cyan-500 text-slate-950' : 'text-white hover:bg-white/5'}`}
               >
                 {item.label}
