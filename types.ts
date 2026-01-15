@@ -10,8 +10,17 @@ export interface Experience {
 export interface Project {
   title: string;
   description: string;
+  fullDescription?: string;
+  role?: string;
+  impact?: string[];
+  challenges?: string[];
+  solutions?: string[];
+  year?: string;
+  category?: string;
+  industry?: string;
   tech: string[];
   link?: string;
+  github?: string;
   image: string;
 }
 

@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Project } from '../types';
+import { Github, ExternalLink, X } from 'lucide-react';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -12,7 +13,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
 
   useEffect(() => {
     if (project) {
-      // Trigger entrance animation
       setTimeout(() => setIsVisible(true), 10);
       document.body.style.overflow = 'hidden';
     } else {
@@ -25,7 +25,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
 
   const handleClose = () => {
     setIsVisible(false);
-    setTimeout(onClose, 300); // Wait for exit animation
+    setTimeout(onClose, 300);
   };
 
   return (
@@ -42,21 +42,22 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
 
       {/* Modal Content */}
       <div 
-        className={`relative w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] overflow-hidden glass rounded-[2rem] md:rounded-[3rem] border-white/10 shadow-2xl transition-all duration-500 transform ${
+        className={`relative w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] overflow-hidden glass rounded-[2rem] md:rounded-[3rem] border border-white/10 shadow-2xl transition-all duration-500 transform ${
           isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-8'
         }`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="project-modal-title"
       >
-        {/* Close Button - Sticky/Fixed relative to modal */}
+        {/* Close Button */}
         <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30">
           <button 
             onClick={handleClose}
-            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full glass border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-slate-950 transition-all active:scale-90 shadow-lg"
-            aria-label="Close Modal"
+            className="w-12 h-12 sm:w-12 sm:h-12 rounded-full glass border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-slate-950 transition-all active:scale-90 shadow-lg min-w-[44px] min-h-[44px]"
+            aria-label="Close modal"
+            title="Close modal"
           >
-            <svg width="20" height="20" className="sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
 
@@ -73,45 +74,136 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
             </div>
 
             {/* Info Column */}
-            <div className="p-6 sm:p-10 md:p-14 lg:p-16 flex flex-col justify-center">
+            <div className="p-6 sm:p-10 md:p-14 lg:p-16 flex flex-col justify-start overflow-y-auto max-h-[95vh] md:max-h-[90vh]">
+              {/* Tech Tags */}
               <div className="flex flex-wrap gap-2 mb-4 md:mb-6">
                 {project.tech.map((t, i) => (
-                  <span key={i} className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 bg-cyan-400/10 px-2 sm:px-3 py-1 rounded-md">
+                  <span key={i} className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 bg-cyan-400/10 px-2 sm:px-3 py-1 rounded-md border border-cyan-500/20">
                     {t}
                   </span>
                 ))}
               </div>
               
-              <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 md:mb-6 leading-none tracking-tighter uppercase">
+              {/* Title */}
+              <h2 id="project-modal-title" className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-white mb-4 md:mb-6 leading-none tracking-tighter">
                 {project.title}
-              </h3>
-              
-              <div className="space-y-4 md:space-y-6 text-slate-300 text-base sm:text-lg leading-relaxed font-medium">
-                <p>{project.description}</p>
-                <p className="text-slate-500 text-xs sm:text-sm">
-                  This project represents a synthesis of technical engineering and analytical reasoning. It was developed to address specific operational challenges, utilizing a modern stack and data-first architecture.
-                </p>
+              </h2>
+
+              {/* Metadata */}
+              <div className="flex flex-wrap gap-4 mb-6 pb-6 border-b border-white/10">
+                {project.year && (
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-slate-500 font-bold">Year</div>
+                    <div className="text-white font-bold">{project.year}</div>
+                  </div>
+                )}
+                {project.category && (
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-slate-500 font-bold">Category</div>
+                    <div className="text-white font-bold">{project.category}</div>
+                  </div>
+                )}
+                {project.industry && (
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-slate-500 font-bold">Industry</div>
+                    <div className="text-white font-bold">{project.industry}</div>
+                  </div>
+                )}
+                {project.role && (
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-slate-500 font-bold">My Role</div>
+                    <div className="text-white font-bold">{project.role}</div>
+                  </div>
+                )}
               </div>
 
-              <div className="mt-8 md:mt-12 flex flex-col sm:flex-row gap-4">
-                <a 
-                  href={project.link || "#"} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-cyan-500 text-slate-950 font-black rounded-xl sm:rounded-2xl flex items-center justify-center gap-2 hover:scale-105 transition-transform"
-                >
-                  Live Preview
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </a>
-                <button 
-                  onClick={handleClose}
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 glass border border-white/10 text-white font-bold rounded-xl sm:rounded-2xl hover:bg-white/5 transition-all"
-                >
-                  Back to projects
-                </button>
+              {/* Description */}
+              <div className="space-y-4 md:space-y-6 mb-8">
+                <div>
+                  <p className="text-slate-300 text-base sm:text-lg leading-relaxed font-medium">
+                    {project.description}
+                  </p>
+                </div>
+
+                {project.fullDescription && (
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-cyan-400 font-bold mb-2">Overview</div>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                      {project.fullDescription}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Impact Metrics */}
+              {project.impact && project.impact.length > 0 && (
+                <div className="mb-8 pb-8 border-b border-white/10">
+                  <div className="text-xs uppercase tracking-widest text-cyan-400 font-bold mb-4">Key Impact</div>
+                  <div className="grid grid-cols-1 gap-3">
+                    {project.impact.map((metric, i) => (
+                      <div key={i} className="text-sm text-slate-300 flex items-start gap-3">
+                        <span className="text-cyan-400 font-bold text-lg mt-[-3px]">✓</span>
+                        <span>{metric}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Challenges */}
+              {project.challenges && project.challenges.length > 0 && (
+                <div className="mb-8 pb-8 border-b border-white/10">
+                  <div className="text-xs uppercase tracking-widest text-yellow-400 font-bold mb-4">Challenges Faced</div>
+                  <div className="grid grid-cols-1 gap-3">
+                    {project.challenges.map((challenge, i) => (
+                      <div key={i} className="text-sm text-slate-300 flex items-start gap-3">
+                        <span className="text-yellow-400 font-bold text-lg mt-[-3px]">⚡</span>
+                        <span>{challenge}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Solutions */}
+              {project.solutions && project.solutions.length > 0 && (
+                <div className="mb-8 pb-8 border-b border-white/10">
+                  <div className="text-xs uppercase tracking-widest text-emerald-400 font-bold mb-4">Solutions Implemented</div>
+                  <div className="grid grid-cols-1 gap-3">
+                    {project.solutions.map((solution, i) => (
+                      <div key={i} className="text-sm text-slate-300 flex items-start gap-3">
+                        <span className="text-emerald-400 font-bold text-lg mt-[-3px]">→</span>
+                        <span>{solution}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                {project.link && (
+                  <a 
+                    href={project.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex-1 px-6 sm:px-8 py-4 sm:py-5 bg-cyan-500 text-slate-950 font-black rounded-xl sm:rounded-2xl flex items-center justify-center gap-2 hover:scale-105 transition-transform min-h-[44px]"
+                  >
+                    Live Demo
+                    <ExternalLink className="w-5 h-5" />
+                  </a>
+                )}
+                {project.github && (
+                  <a 
+                    href={project.github} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex-1 px-6 sm:px-8 py-4 sm:py-5 glass border border-white/10 text-white font-bold rounded-xl sm:rounded-2xl hover:bg-white/5 transition-all flex items-center justify-center gap-2 min-h-[44px]"
+                  >
+                    View Code
+                    <Github className="w-5 h-5" />
+                  </a>
+                )}
               </div>
             </div>
           </div>

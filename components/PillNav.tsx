@@ -172,13 +172,20 @@ const PillNav: React.FC<PillNavProps> = ({
 
   return (
     <div className="pill-nav-container fixed top-6 left-0 right-0 z-[150] flex justify-center pointer-events-none px-6">
-      <nav className={`pill-nav glass ${className} pointer-events-auto`} style={cssVars}>
+      <nav 
+        className={`pill-nav glass ${className} pointer-events-auto`} 
+        style={cssVars}
+        role="navigation"
+        aria-label="Main navigation"
+      >
         <a
           className="pill-logo"
-          href="#"
+          href="#home"
           onClick={(e) => { e.preventDefault(); onNavigate('home'); }}
           onMouseEnter={handleLogoEnter}
           ref={logoRef}
+          aria-label="Go to home page"
+          title="Home"
         >
           <div className="w-10 h-10 rounded-full bg-cyan-500 flex items-center justify-center text-slate-950 font-black text-xs overflow-hidden">
              <img src={logo} alt={logoAlt} ref={logoImgRef} className="w-full h-full object-cover" />
@@ -186,14 +193,18 @@ const PillNav: React.FC<PillNavProps> = ({
         </a>
 
         <div className="pill-nav-items hidden md:flex" ref={navItemsRef}>
-          <ul className="pill-list flex items-center gap-2 m-0 p-0 list-none">
+          <ul className="pill-list flex items-center gap-2 m-0 p-0 list-none" role="menubar">
             {items.map((item, i) => (
-              <li key={item.href}>
+              <li key={item.href} role="none">
                 <button
                   onClick={() => onNavigate(item.href)}
-                  className={`pill relative overflow-hidden flex items-center justify-center px-5 py-2.5 rounded-full transition-all duration-300 group ${activeHref === item.href ? 'is-active' : ''}`}
+                  className={`pill relative overflow-hidden flex items-center justify-center px-5 py-2.5 rounded-full transition-all duration-300 group min-h-[44px] ${activeHref === item.href ? 'is-active' : ''}`}
                   onMouseEnter={() => handleEnter(i)}
                   onMouseLeave={() => handleLeave(i)}
+                  aria-current={activeHref === item.href ? 'page' : undefined}
+                  aria-label={item.ariaLabel || `Go to ${item.label}`}
+                  role="menuitem"
+                  title={item.label}
                 >
                   <span
                     className="hover-circle absolute left-1/2 rounded-full bg-cyan-400 z-0 pointer-events-none"

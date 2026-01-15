@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SkillsGrid from '../components/SkillsGrid';
+import SkillsVisualization from '../components/SkillsVisualization';
+import { BarChart3, LineChart as LineChartIcon } from 'lucide-react';
+import { SKILL_CATEGORIES } from '../constants';
 
 const AboutPage: React.FC = () => {
+  const [chartType, setChartType] = useState<'bar' | 'line'>('bar');
+
+  // Flatten skills for visualization
+  const allSkills = SKILL_CATEGORIES.flatMap(category =>
+    category.skills.map(skill => ({
+      name: skill.name,
+      level: skill.level,
+      category: category.name
+    }))
+  );
+
   return (
     <div className="min-h-screen py-20 px-4 container mx-auto">
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start mb-20">
           {/* Left Column - Story */}
           <div className="space-y-12">
             <div>
@@ -96,7 +110,92 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Skills Visualization Section */}
+        <div className="space-y-8">
+          <div>
+            <span className="inline-block text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-4">
+              Proficiency Metrics
+            </span>
+            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white tracking-tight">
+              Skill Proficiency Overview
+            </h2>
+            <div className="h-1 w-24 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full mb-8"></div>
+            <p className="text-slate-400 text-lg max-w-2xl">
+              A comprehensive view of my technical proficiency levels across different domains and technologies
+            </p>
+          </div>
+
+          {/* Chart Type Toggle */}
+          <div className="flex gap-4 mb-8">
+            <button
+              onClick={() => setChartType('bar')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-bold transition-all ${
+                chartType === 'bar'
+                  ? 'bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-lg'
+                  : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
+              }`}
+            >
+              <BarChart3 className="w-5 h-5" />
+              Bar Chart
+            </button>
+            <button
+              onClick={() => setChartType('line')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-bold transition-all ${
+                chartType === 'line'
+                  ? 'bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-lg'
+                  : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
+              }`}
+            >
+              <LineChartIcon className="w-5 h-5" />
+              Line Chart
+            </button>
+          </div>
+
+          {/* Visualization */}
+          <div className="bg-gradient-to-br from-white/5 to-white/[0.02] rounded-3xl p-8 border border-white/10 backdrop-blur-sm">
+            <SkillsVisualization skills={allSkills} chartType={chartType} />
+          </div>
+
+          {/* Skill Categories Legend */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {SKILL_CATEGORIES.map((category, idx) => (
+              <div key={idx} className="glass-card p-6 rounded-2xl border border-white/10 backdrop-blur-sm bg-white/5">
+                <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-3">
+                  <div className={`w-4 h-4 rounded ${idx === 0 ? 'bg-cyan-500' : 'bg-indigo-500'}`}></div>
+                  {category.name}
+                </h3>
+                <div className="space-y-2">
+                  {category.skills.map((skill, i) => (
+                    <div key={i} className="flex items-center justify-between text-sm">
+                      <span className="text-slate-300">{skill.name}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-32 h-2 bg-white/10 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full ${idx === 0 ? 'bg-cyan-500' : 'bg-indigo-500'}`}
+                            style={{ width: `${skill.level}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-cyan-400 font-bold text-xs w-8 text-right">{skill.level}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+          }
+        `
+      }} />
     </div>
   );
 };
