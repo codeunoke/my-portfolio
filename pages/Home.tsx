@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View } from '../App';
 import ScrambledText from '../components/ScrambledText';
-import FuzzyText from '../components/FuzzyText';
 import { ChevronRight, Sparkles, Terminal } from 'lucide-react';
 
 interface HomeProps {
@@ -53,27 +52,20 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 rounded-full blur-3xl"></div>
       </div>
-
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        {/* Name Heading with Fuzzy Text Effect */}
-        <div className="mb-12 md:mb-16 flex justify-center">
-          <FuzzyText
-            fontSize="clamp(3rem, 12vw, 8rem)"
-            fontWeight={900}
-            color="#06B6D4"
+        {/* Name Heading with Scrambled Text Effect */}
+        <div className="mb-12 md:mb-16">
+          <ScrambledText 
+            className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-cyan-400 leading-tight select-none"
+            radius={180}
+            duration={0.7}
+            speed={0.4}
             enableHover={true}
-            baseIntensity={0.15}
-            hoverIntensity={0.45}
-            fuzzRange={25}
-            fps={60}
-            direction="both"
-            transitionDuration={200}
-            clickEffect={false}
-            glitchMode={false}
-            className="select-none"
+            glowColor="#06B6D4"
+            glowIntensity={0.8}
           >
             Godwin Mbabu
-          </FuzzyText>
+          </ScrambledText>
         </div>
 
         <div className="max-w-6xl mx-auto">
