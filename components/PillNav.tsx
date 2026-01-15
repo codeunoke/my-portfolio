@@ -171,7 +171,7 @@ const PillNav: React.FC<PillNavProps> = ({
   } as React.CSSProperties;
 
   return (
-    <div className="pill-nav-container fixed top-6 left-0 right-0 z-[150] flex justify-center pointer-events-none px-6">
+    <div className="pill-nav-container fixed top-4 sm:top-6 left-0 right-0 z-[150] flex justify-center pointer-events-none px-3 sm:px-6">
       <nav 
         className={`pill-nav glass ${className} pointer-events-auto`} 
         style={cssVars}
@@ -179,7 +179,7 @@ const PillNav: React.FC<PillNavProps> = ({
         aria-label="Main navigation"
       >
         <a
-          className="pill-logo"
+          className="pill-logo flex-shrink-0"
           href="#home"
           onClick={(e) => { e.preventDefault(); onNavigate('home'); }}
           onMouseEnter={handleLogoEnter}
@@ -187,18 +187,18 @@ const PillNav: React.FC<PillNavProps> = ({
           aria-label="Go to home page"
           title="Home"
         >
-          <div className="w-10 h-10 rounded-full bg-cyan-500 flex items-center justify-center text-slate-950 font-black text-xs overflow-hidden">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-cyan-500 flex items-center justify-center text-slate-950 font-black text-xs overflow-hidden">
              <img src={logo} alt={logoAlt} ref={logoImgRef} className="w-full h-full object-cover" />
           </div>
         </a>
 
         <div className="pill-nav-items hidden md:flex" ref={navItemsRef}>
-          <ul className="pill-list flex items-center gap-2 m-0 p-0 list-none" role="menubar">
+          <ul className="pill-list flex items-center gap-1.5 sm:gap-2 m-0 p-0 list-none" role="menubar">
             {items.map((item, i) => (
               <li key={item.href} role="none">
                 <button
                   onClick={() => onNavigate(item.href)}
-                  className={`pill relative overflow-hidden flex items-center justify-center px-5 py-2.5 rounded-full transition-all duration-300 group min-h-[44px] ${activeHref === item.href ? 'is-active' : ''}`}
+                  className={`pill relative overflow-hidden flex items-center justify-center px-4 sm:px-5 py-2.5 rounded-full transition-all duration-300 group min-h-[44px] text-xs sm:text-sm ${activeHref === item.href ? 'is-active' : ''}`}
                   onMouseEnter={() => handleEnter(i)}
                   onMouseLeave={() => handleLeave(i)}
                   aria-current={activeHref === item.href ? 'page' : undefined}
@@ -211,10 +211,10 @@ const PillNav: React.FC<PillNavProps> = ({
                     ref={el => { circleRefs.current[i] = el; }}
                   />
                   <span className="label-stack relative z-10 flex flex-col items-center">
-                    <span className="pill-label font-bold text-[13px] tracking-tight transition-colors duration-300 text-slate-400 group-[.is-active]:text-cyan-400">
+                    <span className="pill-label font-bold text-xs sm:text-[13px] tracking-tight transition-colors duration-300 text-slate-400 group-[.is-active]:text-cyan-400">
                       {item.label}
                     </span>
-                    <span className="pill-label-hover absolute font-black text-[13px] tracking-tight text-slate-950 pointer-events-none">
+                    <span className="pill-label-hover absolute font-black text-xs sm:text-[13px] tracking-tight text-slate-950 pointer-events-none">
                       {item.label}
                     </span>
                   </span>
@@ -225,22 +225,24 @@ const PillNav: React.FC<PillNavProps> = ({
         </div>
 
         <button
-          className="mobile-menu-button md:hidden flex flex-col gap-1 w-8 h-8 items-center justify-center bg-white/5 rounded-lg border border-white/10"
+          className="mobile-menu-button md:hidden flex flex-col gap-1.5 w-11 h-11 items-center justify-center bg-white/5 rounded-lg border border-white/10 min-h-[44px] flex-shrink-0"
           onClick={toggleMobileMenu}
           ref={hamburgerRef}
+          aria-label="Toggle mobile menu"
+          aria-expanded={isMobileMenuOpen}
         >
-          <span className="hamburger-line w-5 h-[2px] bg-white rounded-full" />
-          <span className="hamburger-line w-5 h-[2px] bg-white rounded-full" />
+          <span className="hamburger-line w-5 h-[2px] bg-white rounded-full transition-all duration-300" />
+          <span className="hamburger-line w-5 h-[2px] bg-white rounded-full transition-all duration-300" />
         </button>
       </nav>
 
-      <div className="mobile-menu-popover md:hidden absolute top-20 left-6 right-6 glass rounded-3xl p-6 border border-white/10" ref={mobileMenuRef} style={{ visibility: 'hidden' }}>
+      <div className="mobile-menu-popover md:hidden absolute top-16 sm:top-20 left-3 right-3 sm:left-6 sm:right-6 glass rounded-3xl p-4 sm:p-6 border border-white/10" ref={mobileMenuRef} style={{ visibility: 'hidden' }}>
         <ul className="mobile-menu-list flex flex-col gap-2 p-0 m-0 list-none">
           {items.map((item) => (
             <li key={item.href}>
               <button
                 onClick={() => { onNavigate(item.href); toggleMobileMenu(); }}
-                className={`w-full text-left px-6 py-4 rounded-2xl font-bold text-lg transition-all ${activeHref === item.href ? 'bg-cyan-500 text-slate-950' : 'text-white hover:bg-white/5'}`}
+                className={`w-full text-left px-4 sm:px-6 py-3 sm:py-4 rounded-2xl font-bold text-base sm:text-lg transition-all min-h-[44px] flex items-center ${activeHref === item.href ? 'bg-cyan-500 text-slate-950' : 'text-white hover:bg-white/5'}`}
               >
                 {item.label}
               </button>
@@ -253,10 +255,16 @@ const PillNav: React.FC<PillNavProps> = ({
         .pill-nav {
           display: flex;
           align-items: center;
-          gap: 2rem;
+          gap: 1.5rem;
           padding: 0.75rem 1rem;
           border-radius: 9999px;
           border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        @media (max-width: 640px) {
+          .pill-nav {
+            gap: 0.75rem;
+            padding: 0.5rem 0.75rem;
+          }
         }
         .pill-logo {
           transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);

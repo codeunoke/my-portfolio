@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import PillNav from './components/PillNav';
 import Footer from './components/Footer';
+import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
 import ExperiencePage from './pages/ExperiencePage';
 import ProjectsPage from './pages/ProjectsPage';
@@ -100,12 +101,13 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div 
-      className={`min-h-screen transition-colors duration-300 relative overflow-hidden bg-grid selection:bg-cyan-500 ${
-        isDarkMode
-          ? 'bg-[#020617] text-slate-200'
-        : 'bg-slate-50 text-slate-900'
-    }`}>
+    <ErrorBoundary>
+      <div 
+        className={`min-h-screen transition-colors duration-300 relative overflow-hidden bg-grid selection:bg-cyan-500 ${
+          isDarkMode
+            ? 'bg-[#020617] text-slate-200'
+          : 'bg-slate-50 text-slate-900'
+      }`}>
       {/* Visual background layers */}
       <div className={`fixed top-[-10%] left-[-10%] w-[60%] h-[60%] blur-[180px] rounded-full pointer-events-none opacity-40 ${
         isDarkMode ? 'bg-cyan-500/10' : 'bg-cyan-400/5'
@@ -202,6 +204,7 @@ const App: React.FC = () => {
         `
       }} />
     </div>
+    </ErrorBoundary>
   );
 };
 
