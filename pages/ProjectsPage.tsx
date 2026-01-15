@@ -1,69 +1,260 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import ProjectModal from '../components/ProjectModal';
+import { ExternalLink, Github, Sparkles, Zap, Filter, Eye, BarChart } from 'lucide-react';
+
+const CATEGORIES = ['All', 'Data Science', 'Web Apps', 'Analytics', 'Machine Learning', 'Dashboards'];
 
 const ProjectsPage: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string>('All');
+  const [filteredProjects, setFilteredProjects] = useState(PROJECTS);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (activeFilter === 'All') {
+      setFilteredProjects(PROJECTS);
+    } else {
+      setFilteredProjects(
+        PROJECTS.filter(project => 
+          project.category === activeFilter || 
+          project.tech.some(t => t.toLowerCase().includes(activeFilter.toLowerCase()))
+        )
+      );
+    }
+  }, [activeFilter]);
+
+  const stats = {
+    totalProjects: PROJECTS.length,
+    industries: [...new Set(PROJECTS.map(p => p.industry || 'Tech').flat())].length,
+    yearsActive: new Date().getFullYear() - Math.min(...PROJECTS.map(p => new Date(p.year || '2020').getFullYear())) + 1
+  };
 
   return (
-    <div className="py-32 px-6 container mx-auto">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
-          <div className="max-w-2xl">
-            <h2 className="text-7xl md:text-9xl font-black mb-6 text-white tracking-tighter leading-none">WORKS</h2>
-            <p className="text-xl text-slate-400 font-medium">Selected cases spanning data science and engineering.</p>
+    <div className="min-h-screen py-20 px-4 container mx-auto relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-20 md:mb-32">
+          <div className="inline-flex items-center gap-3 mb-8 px-4 py-2.5 rounded-full border border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-cyan-500/5 backdrop-blur-sm text-cyan-400 text-xs font-bold tracking-[0.2em] uppercase">
+            <Sparkles className="w-3.5 h-3.5" />
+            Portfolio Showcase
           </div>
-          <div className="glass px-8 py-4 rounded-full flex gap-10">
-             <div className="text-center">
-               <div className="text-2xl font-bold text-white">12+</div>
-               <div className="text-[10px] uppercase font-black text-slate-500 tracking-widest">Shipped</div>
-             </div>
-             <div className="text-center">
-               <div className="text-2xl font-bold text-white">4</div>
-               <div className="text-[10px] uppercase font-black text-slate-500 tracking-widest">Industry</div>
-             </div>
+
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 mb-16">
+            <div className="max-w-3xl">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 text-white tracking-tighter leading-none">
+                <span className="block bg-gradient-to-r from-cyan-400 via-white to-indigo-400 bg-clip-text text-transparent">
+                  PROJECTS
+                </span>
+                <span className="text-3xl md:text-4xl text-cyan-400 block mt-4">Case Studies & Solutions</span>
+              </h1>
+              <p className="text-xl text-slate-300 font-medium max-w-2xl leading-relaxed">
+                Building data-driven solutions that bridge analytics and engineering for impactful results.
+              </p>
+            </div>
+            
+            {/* Stats Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 min-w-[300px]">
+              {[
+                { label: "Projects", value: `${stats.totalProjects}+`, icon: <Zap className="w-4 h-4" />, color: "from-cyan-500 to-blue-500" },
+                { label: "Industries", value: `${stats.industries}`, icon: <BarChart className="w-4 h-4" />, color: "from-indigo-500 to-purple-500" },
+                { label: "Years Active", value: `${stats.yearsActive}`, icon: <Sparkles className="w-4 h-4" />, color: "from-emerald-500 to-cyan-500" }
+              ].map((stat, idx) => (
+                <div key={idx} className="glass-card p-6 rounded-2xl border border-white/5 backdrop-blur-sm hover:border-white/10 transition-all hover:scale-105">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className={`p-2 rounded-lg bg-gradient-to-br ${stat.color} bg-opacity-20`}>
+                      {stat.icon}
+                    </div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                      {stat.label}
+                    </div>
+                  </div>
+                  <div className={`text-3xl font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                    {stat.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Filter Tabs */}
+          <div className="flex flex-wrap gap-3 mb-12">
+            <div className="flex items-center gap-2 text-slate-400 text-sm font-bold mr-4">
+              <Filter className="w-4 h-4" />
+              Filter by:
+            </div>
+            {CATEGORIES.map((category) => (
+              <button
+                key={category}
+                onClick={() => setActiveFilter(category)}
+                className={`px-5 py-2.5 rounded-full border transition-all duration-300 text-sm font-bold uppercase tracking-wider ${
+                  activeFilter === category
+                    ? 'bg-gradient-to-r from-cyan-500 to-indigo-500 text-white border-transparent shadow-lg shadow-cyan-500/20'
+                    : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10 hover:text-slate-300'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
           </div>
         </div>
-        
-        <div className="grid md:grid-cols-2 gap-x-12 gap-y-24">
-          {PROJECTS.map((project, idx) => (
+
+        {/* Projects Grid */}
+        <div className="grid lg:grid-cols-2 gap-x-8 gap-y-20">
+          {filteredProjects.map((project, idx) => (
             <div 
-              key={idx} 
-              className="group cursor-pointer"
-              onClick={() => setSelectedProject(project)}
+              key={idx}
+              className="group relative"
+              onMouseEnter={() => setHoveredIndex(idx)}
+              onMouseLeave={() => setHoveredIndex(null)}
             >
-              <div className="aspect-[16/10] relative rounded-[3rem] overflow-hidden mb-10 bg-slate-900 border border-white/5 transition-all duration-700 group-hover:border-cyan-500/20 group-hover:shadow-[0_40px_100px_-20px_rgba(34,211,238,0.15)]">
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="object-cover w-full h-full grayscale group-hover:grayscale-0 scale-100 group-hover:scale-110 transition-all duration-[1.5s] ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                
-                <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                  <div className="flex gap-2">
-                    {project.tech.map((t, i) => (
-                      <span key={i} className="text-[9px] font-black uppercase tracking-widest bg-cyan-500 text-slate-950 px-3 py-1 rounded-md">
+              {/* Project Card */}
+              <div 
+                className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/5 backdrop-blur-sm transition-all duration-700 hover:scale-[1.02] hover:border-cyan-500/30 hover:shadow-[0_40px_100px_-20px_rgba(34,211,238,0.15)]"
+                onClick={() => setSelectedProject(project)}
+              >
+                {/* Image Container */}
+                <div className="aspect-[16/9] relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-indigo-500/10 z-10"></div>
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="object-cover w-full h-full grayscale group-hover:grayscale-0 scale-100 group-hover:scale-110 transition-all duration-[1.2s] ease-out"
+                    loading="lazy"
+                  />
+                  
+                  {/* Overlay Content */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  {/* Tech Tags */}
+                  <div className="absolute top-6 left-6 right-6 flex flex-wrap gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                    {project.tech.slice(0, 3).map((t, i) => (
+                      <span 
+                        key={i}
+                        className="text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 text-cyan-400 px-3 py-1.5 rounded-full border border-cyan-500/30 backdrop-blur-sm"
+                      >
                         {t}
                       </span>
                     ))}
+                    {project.tech.length > 3 && (
+                      <span className="text-xs font-bold uppercase tracking-wider bg-white/10 text-slate-300 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-sm">
+                        +{project.tech.length - 3}
+                      </span>
+                    )}
+                  </div>
+                  
+                  {/* View Button */}
+                  <div className="absolute bottom-6 right-6">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500 flex items-center justify-center text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 group-hover:rotate-90 hover:scale-110">
+                      <Eye className="w-6 h-6" />
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              <div className="px-4">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-4xl font-black text-white tracking-tight group-hover:text-cyan-400 transition-colors uppercase">{project.title}</h3>
-                  <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-slate-950 transition-all">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                
+                {/* Content */}
+                <div className="p-8">
+                  <div className="flex justify-between items-start mb-6">
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-xs font-bold uppercase tracking-widest text-cyan-400">
+                          {project.category}
+                        </span>
+                        <span className="text-slate-500">•</span>
+                        <span className="text-xs font-bold uppercase tracking-widest text-slate-500">
+                          {project.year}
+                        </span>
+                      </div>
+                      <h3 className="text-3xl font-bold text-white tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-indigo-400 transition-all duration-300 mb-2">
+                        {project.title}
+                      </h3>
+                    </div>
+                  </div>
+                  
+                  <p className="text-slate-300 text-lg leading-relaxed font-medium line-clamp-2 mb-6">
+                    {project.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between pt-6 border-t border-white/10">
+                    <div className="flex items-center gap-4">
+                      {project.github && (
+                        <a 
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Github className="w-5 h-5" />
+                        </a>
+                      )}
+                      {project.link && (
+                        <a 
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition-colors"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Live Demo
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      )}
+                    </div>
+                    
+                    <span className="text-xs font-bold uppercase tracking-widest text-slate-500">
+                      {project.industry || 'Technology'}
+                    </span>
                   </div>
                 </div>
-                <p className="text-slate-400 text-lg leading-relaxed font-medium line-clamp-2">{project.description}</p>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Empty State */}
+        {filteredProjects.length === 0 && (
+          <div className="text-center py-24">
+            <div className="glass-card max-w-md mx-auto p-12 rounded-3xl border border-white/5">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 flex items-center justify-center">
+                <Filter className="w-8 h-8 text-cyan-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-3">No projects found</h3>
+              <p className="text-slate-400 mb-6">Try selecting a different category to view more projects.</p>
+              <button
+                onClick={() => setActiveFilter('All')}
+                className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white font-bold rounded-full transition-all hover:scale-105"
+              >
+                Show All Projects
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* View More CTA */}
+        <div className="mt-32 text-center">
+          <div className="max-w-2xl mx-auto">
+            <h3 className="text-3xl font-bold text-white mb-6">
+              Have a project in mind?
+            </h3>
+            <p className="text-slate-400 text-lg mb-10 leading-relaxed">
+              Let's collaborate to bring your data-driven ideas to life.
+            </p>
+            <a 
+              href="#contact"
+              className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white font-bold rounded-full transition-all hover:scale-105 active:scale-95 shadow-xl shadow-cyan-500/25 hover:shadow-2xl hover:shadow-cyan-500/40"
+            >
+              Start a Project
+              <Zap className="w-5 h-5" />
+            </a>
+          </div>
         </div>
       </div>
 
@@ -71,6 +262,38 @@ const ProjectsPage: React.FC = () => {
         project={selectedProject} 
         onClose={() => setSelectedProject(null)} 
       />
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+          }
+          
+          .line-clamp-2 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+          }
+          
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+          }
+        `
+      }} />
     </div>
   );
 };
